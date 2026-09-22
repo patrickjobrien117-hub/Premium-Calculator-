@@ -69,16 +69,22 @@ th,td{
   text-align:right
 }
 
-th:first-child,td:first-child{text-align:left}
+th:first-child,td:first-child{
+  text-align:left
+}
 
 td input{
   width:110px;
   text-align:right
 }
 
-td select{width:85px}
+td select{
+  width:85px
+}
 
-.result{font-weight:700}
+.result{
+  font-weight:700
+}
 
 .note{
   font-size:13px;
@@ -87,6 +93,199 @@ td select{width:85px}
 }
 
 @media(max-width:700px){
-  table{font-size:12px}
-  td input{width:75px;padding:7px}
-  td select{width:
+  table{
+    font-size:12px
+  }
+
+  td input{
+    width:75px;
+    padding:7px
+  }
+
+  td select{
+    width:65px;
+    padding:7px
+  }
+
+  th,td{
+    padding:8px 4px
+  }
+
+  .card{
+    padding:14px
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Premium Contribution Calculator</h1>
+
+<div class="sub">
+Enter the monthly premium and choose whether the employer contribution is based on a percentage or fixed dollar amount.
+</div>
+
+<table>
+<thead>
+<tr>
+  <th>Tier</th>
+  <th>Monthly Premium</th>
+  <th>Contribution Type</th>
+  <th>Employer Contribution</th>
+  <th>Employer Pays</th>
+  <th>Employee Pays</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+  <td>Employee Only</td>
+
+  <td>
+    $ <input type="number" id="premiumEE" min="0" step="0.01" oninput="calculate('EE')">
+  </td>
+
+  <td>
+    <select id="typeEE" onchange="calculate('EE')">
+      <option value="percent">%</option>
+      <option value="dollar">$</option>
+    </select>
+  </td>
+
+  <td>
+    <input type="number" id="contributionEE" min="0" step="0.01" oninput="calculate('EE')">
+  </td>
+
+  <td class="result" id="employerEE">$0.00</td>
+
+  <td class="result" id="employeeEE">$0.00</td>
+</tr>
+
+
+<tr>
+  <td>Employee + Spouse</td>
+
+  <td>
+    $ <input type="number" id="premiumES" min="0" step="0.01" oninput="calculate('ES')">
+  </td>
+
+  <td>
+    <select id="typeES" onchange="calculate('ES')">
+      <option value="percent">%</option>
+      <option value="dollar">$</option>
+    </select>
+  </td>
+
+  <td>
+    <input type="number" id="contributionES" min="0" step="0.01" oninput="calculate('ES')">
+  </td>
+
+  <td class="result" id="employerES">$0.00</td>
+
+  <td class="result" id="employeeES">$0.00</td>
+</tr>
+
+
+<tr>
+  <td>Employee + Child(ren)</td>
+
+  <td>
+    $ <input type="number" id="premiumEC" min="0" step="0.01" oninput="calculate('EC')">
+  </td>
+
+  <td>
+    <select id="typeEC" onchange="calculate('EC')">
+      <option value="percent">%</option>
+      <option value="dollar">$</option>
+    </select>
+  </td>
+
+  <td>
+    <input type="number" id="contributionEC" min="0" step="0.01" oninput="calculate('EC')">
+  </td>
+
+  <td class="result" id="employerEC">$0.00</td>
+
+  <td class="result" id="employeeEC">$0.00</td>
+</tr>
+
+
+<tr>
+  <td>Family</td>
+
+  <td>
+    $ <input type="number" id="premiumEF" min="0" step="0.01" oninput="calculate('EF')">
+  </td>
+
+  <td>
+    <select id="typeEF" onchange="calculate('EF')">
+      <option value="percent">%</option>
+      <option value="dollar">$</option>
+    </select>
+  </td>
+
+  <td>
+    <input type="number" id="contributionEF" min="0" step="0.01" oninput="calculate('EF')">
+  </td>
+
+  <td class="result" id="employerEF">$0.00</td>
+
+  <td class="result" id="employeeEF">$0.00</td>
+</tr>
+
+</tbody>
+</table>
+
+<div class="note">
+For percentage contributions, enter a number such as 75 for 75%.
+For fixed contributions, select $ and enter the employer's monthly dollar contribution.
+</div>
+
+</div>
+
+<script>
+
+function calculate(tier){
+
+  const premium =
+    parseFloat(document.getElementById("premium" + tier).value) || 0;
+
+  const contribution =
+    parseFloat(document.getElementById("contribution" + tier).value) || 0;
+
+  const type =
+    document.getElementById("type" + tier).value;
+
+  let employerPays = 0;
+
+  if(type === "percent"){
+
+    employerPays = premium * (contribution / 100);
+
+  } else {
+
+    employerPays = contribution;
+
+  }
+
+  // Employer contribution cannot exceed the premium
+  employerPays = Math.min(employerPays, premium);
+
+  const employeePays =
+    Math.max(premium - employerPays, 0);
+
+  document.getElementById("employer" + tier).textContent =
+    "$" + employerPays.toFixed(2);
+
+  document.getElementById("employee" + tier).textContent =
+    "$" + employeePays.toFixed(2);
+}
+
+</script>
+
+</body>
+</html>
